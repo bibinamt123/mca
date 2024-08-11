@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .hero-section {
+            background: url('https://example.com/path-to-your-image.jpg') no-repeat center center;
+            background-size: cover;
+            height: 100vh;
+            color: white;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .hero-section h1 {
+            font-size: 4rem;
+        }
+        .hero-section p {
+            font-size: 1.5rem;
+        }
+        .card {
+            border: none;
+        }
+        .card img {
+            height: 200px;
+            object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Bakery</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'product_list' %}">Products</a>
+                </li>
+                {% comment %} <li class="nav-item">
+                    <a class="nav-link" href="{% url 'feedback' %}">Feedback</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'order' %}">Orders</a>
+                </li> {% endcomment %}
+            </ul>
+        </div>
+    </nav>
+    
+    <header class="hero-section">
+        <div class="container">
+            <h1>{{ title }}</h1>
+            <p>{{ message }}</p>
+            <a href="#products" class="btn btn-light btn-lg">Browse Our Products</a>
+        </div>
+    </header>
+    
+    <section id="products" class="py-5">
+        <div class="container">
+            <div class="row">
+                {% for product in products %}
+                <div class="col-md-4">
+                    <div class="card">
+                        <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ product.name }}</h5>
+                            <p class="card-text">{{ product.des }}</p>
+                            <p class="card-text">Price: ${{ product.price }}</p>
+                            <a href="#" class="btn btn-primary">Buy Now</a>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    
+    <footer class="text-center py-4">
+        <p>&copy; 2024 Bakery Name. All rights reserved.</p>
+    </footer>
+    
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
