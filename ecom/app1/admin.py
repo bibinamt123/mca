@@ -3,7 +3,7 @@ from .models import Product, Order, DeliveryBoy, Feedback
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'description')
+    list_display = ('name', 'price', 'description','image')
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):

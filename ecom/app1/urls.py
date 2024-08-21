@@ -1,5 +1,9 @@
 from django.urls import path
 from . import views
+from django.conf import settings
+from django.conf.urls.static import static
+
+
 
 urlpatterns = [
     path('home', views.home, name='home'),
@@ -9,5 +13,8 @@ urlpatterns = [
     path('products/', views.product_list, name='product_list'),
     path('order/', views.order_product, name='order_product'),
     path('feedback/', views.feedback, name='feedback'),
-    path('view_orders/', views.view_orders, name='view_orders'),
+    path('total-orders/',views.total_orders_view, name='total_orders'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

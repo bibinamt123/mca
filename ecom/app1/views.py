@@ -59,6 +59,7 @@ def feedback(request):
         form = FeedbackForm()
     return render(request, 'feedback.html', {'form': form})
 
-def view_orders(request):
-    orders = Order.objects.all()
-    return render(request, 'view_orders.html', {'orders': orders})
+
+def total_orders_view(request):
+    total_orders = Order.objects.count()
+    return render(request, 'total_orders.html', {'total_orders': total_orders})
