@@ -1,7 +1,12 @@
 from django import forms
-from .models import Product
+from .models import Order, Feedback
 
-class ProductForm(forms.ModelForm):
+class OrderForm(forms.ModelForm):
     class Meta:
-        model = Product
-        fields = ['pro_id', 'name', 'des', 'image', 'price']
+        model = Order
+        fields = ['product', 'quantity', 'address']
+
+class FeedbackForm(forms.ModelForm):
+    class Meta:
+        model = Feedback
+        fields = ['product', 'comment', 'rating']
