@@ -1,10 +1,57 @@
 {% extends 'base.html' %}
+{% load static %} 
 {% block content %}
-    <h2>Register</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Register</button>
-    </form>
-{% endblock %}
+<style>
+    body {
+        background-image: url("{% static 'images/bakery.jpg' %}");
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        height: 100vh;
+        margin: 0;
+    }
 
+    .card {
+        background-color: transparent; /* Remove white background */
+        border: none; /* Remove the card border */
+        color: white;
+    }
+
+    .card-header {
+        background-color: rgba(0, 123, 255, 0.8); /* Semi-transparent background for header */
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+
+    .card-body {
+        padding: 20px;
+    }
+</style>
+
+<div class="container d-flex align-items-center justify-content-center" style="height: 100vh; margin-top: -80px;">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header text-white text-center">
+                <h2 class="mb-0">Register</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="form-group">
+                            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="text-danger">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-primary btn-block">Create Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
