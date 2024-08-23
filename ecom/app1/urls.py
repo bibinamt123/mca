@@ -14,6 +14,8 @@ urlpatterns = [
     path('order/', views.order_product, name='order_product'),
     path('feedback/', views.feedback, name='feedback'),
     path('total-orders/',views.total_orders_view, name='total_orders'),
+    path('order/<int:order_id>/pay/', views.initiate_payment, name='initiate_payment'),
+    path('payment/success/', views.payment_success, name='payment_success'),
 ]
 
 if settings.DEBUG:
