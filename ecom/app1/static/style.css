@@ -975,3 +975,20 @@ form {
   max-width: 600px;
   margin: 0 auto;
 }
+
+.img-box {
+  width: 100%; /* Set to the desired width */
+  height: 300px; /* Set to the desired height */
+  overflow: hidden; /* Hide any overflow */
+  position: relative; /* Establish a positioning context */
+}
+
+.img-box img {
+  position: absolute; /* Remove the image from the normal document flow */
+  top: 50%; /* Position the top edge of the image */
+  left: 50%; /* Position the left edge of the image */
+  transform: translate(-50%, -50%); /* Center the image */
+  width: 100%; /* Make the image fill the container's width */
+  height: 100%; /* Make the image fill the container's height */
+  object-fit: cover; /* Ensure the image covers the container */
+}
