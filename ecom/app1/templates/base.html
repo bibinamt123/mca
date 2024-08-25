@@ -7,28 +7,64 @@
     <title>Bakery Website</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <style>
+        /* Custom styles */
+        .navbar-nav .nav-item.active .nav-link {
+            font-weight: bold;
+            color: #007bff;
+        }
+        .navbar-brand img {
+            height: 40px; /* Adjust logo size */
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top"> <!-- Fixed navbar -->
-        <a class="navbar-brand" href="{% url 'home' %}">Bakery Logo</a>
-        <div class="collapse navbar-collapse">
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <img src="{% static 'Images/logo.jpg' %}" alt="Bakery Logo"> <!-- Add logo image -->
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav mr-auto">
-                <li class="nav-item"><a class="nav-link" href="{% url 'home' %}">Home</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'product_list' %}">Products</a></li>
-                {% comment %} <li class="nav-item"><a class="nav-link" href="{% url 'order_product' %}">Order</a></li> {% endcomment %}
-                <li class="nav-item"><a class="nav-link" href="{% url 'feedback' %}">Feedback</a></li>
-                <li class="nav-item"><a class="nav-link" href="{% url 'user_feedbacks' %}">Feedback commnet</a></li>
-
+                <li class="nav-item{% if request.resolver_match.url_name == 'home' %} active{% endif %}">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+                <li class="nav-item{% if request.resolver_match.url_name == 'product_list' %} active{% endif %}">
+                    <a class="nav-link" href="{% url 'product_list' %}">Products</a>
+                </li>
+                {% comment %} <li class="nav-item{% if request.resolver_match.url_name == 'order_product' %} active{% endif %}"> 
+                    <a class="nav-link" href="{% url 'order_product' %}">Order</a> 
+                </li> {% endcomment %}
+                <li class="nav-item{% if request.resolver_match.url_name == 'feedback' %} active{% endif %}">
+                    <a class="nav-link" href="{% url 'feedback' %}">Feedback</a>
+                </li>
+                <li class="nav-item{% if request.resolver_match.url_name == 'user_feedbacks' %} active{% endif %}">
+                    <a class="nav-link" href="{% url 'user_feedbacks' %}">Feedback Comment</a>
+                </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'total_orders' %}">Total Orders: {{ total_orders }}</a>
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
                 {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ user.username }}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="userDropdown">
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                            <!-- Add more user-related links here -->
+                        </div>
+                    </li>
                 {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Register</a></li>
+                    <li class="nav-item{% if request.resolver_match.url_name == 'login' %} active{% endif %}">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                    </li>
+                    <li class="nav-item{% if request.resolver_match.url_name == 'register' %} active{% endif %}">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
