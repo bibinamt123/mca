@@ -30,15 +30,17 @@ class DeliveryBoy(models.Model):
     def __str__(self):
         return self.user.username
 
-class Feedback(models.Model):
+class Feedback1(models.Model):
     id = models.AutoField(primary_key=True)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     rating = models.PositiveIntegerField()
     comment = models.TextField()
+    reply = models.TextField(null=True, blank=True)  # Admin's reply
 
     def __str__(self):
         return f"Feedback from {self.user.username} on {self.product.name}"
+
     
 
 class Payment(models.Model):

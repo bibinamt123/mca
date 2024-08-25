@@ -4,7 +4,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
-from .models import Product, Order, Feedback,Payment
+from .models import Product, Order, Feedback1,Payment
 from .forms import OrderForm, FeedbackForm
 
 def home(request):
@@ -65,15 +65,25 @@ def order_product(request):
         form = OrderForm()
     return render(request, 'order_product.html', {'form': form})
 
+
 def feedback(request):
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
         if form.is_valid():
-            form.save()
-            return redirect('home')
+            feedback = form.save(commit=False)
+            feedback.user = request.user  # Assign the logged-in user
+            feedback.save()
+            return redirect('feedback_success')
     else:
         form = FeedbackForm()
     return render(request, 'feedback.html', {'form': form})
+
+def user_feedbacks(request):
+    feedbacks = Feedback1.objects.filter(user=request.user)
+    return render(request, 'user_feedbacks.html', {'feedbacks': feedbacks})
+
+def feedback_success(request):
+    return render(request, 'feedback_success.html')
 
 
 def total_orders_view(request):
