@@ -1,19 +1,58 @@
-<form action="{% url 'payment_success' %}" method="POST">
-    <script
-        src="https://checkout.razorpay.com/v1/checkout.js"
-        data-key="{{ razorpay_merchant_key }}"
-        data-amount="{{ amount }}"
-        data-currency="{{ currency }}"
-        data-order_id="{{ razorpay_order_id }}"
-        data-buttontext="Pay with Razorpay"
-        data-name="Your Website Name"
-        data-description="Order Payment"
-        data-image="Your Logo URL"
-        data-prefill.name="{{ request.user.username }}"
-        data-prefill.email="{{ request.user.email }}"
-        data-theme.color="#F37254">
-    </script>
-    <input type="hidden" name="razorpay_payment_id" id="razorpay_payment_id">
-    <input type="hidden" name="razorpay_order_id" id="razorpay_order_id">
-    <input type="hidden" name="razorpay_signature" id="razorpay_signature">
+{% extends 'base.html' %}
+{% block content %}
+<h2>Payment</h2>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<form action="{% url 'payment_success' %}" method="POST" id="razorpay-form">
+    {% csrf_token %}
+    <input type="hidden" name="order_id" value="{{ order_id }}">
+    <input type="hidden" name="total_amount" value="{{ total_amount }}">
+    <button type="button" id="razorpay-button" class="btn btn-primary">Pay with Razorpay</button>
 </form>
+<script>
+    var options = {
+        "key": "{{ settings.RAZORPAY_KEY_ID }}",
+        "amount": "{{ total_amount|floatformat:0 }}", // in paise
+        "currency": "INR",
+        "name": "Your Company Name",
+        "description": "Test Transaction",
+        "image": "https://example.com/your_logo",
+        "order_id": "{{ order_id }}",
+        "handler": function (response) {
+            // Append the response data to the form and submit it
+            var form = document.getElementById('razorpay-form');
+            var hiddenInputPaymentId = document.createElement('input');
+            hiddenInputPaymentId.setAttribute('type', 'hidden');
+            hiddenInputPaymentId.setAttribute('name', 'razorpay_payment_id');
+            hiddenInputPaymentId.setAttribute('value', response.razorpay_payment_id);
+            form.appendChild(hiddenInputPaymentId);
+
+            var hiddenInputOrderId = document.createElement('input');
+            hiddenInputOrderId.setAttribute('type', 'hidden');
+            hiddenInputOrderId.setAttribute('name', 'razorpay_order_id');
+            hiddenInputOrderId.setAttribute('value', response.razorpay_order_id);
+            form.appendChild(hiddenInputOrderId);
+
+            var hiddenInputSignature = document.createElement('input');
+            hiddenInputSignature.setAttribute('type', 'hidden');
+            hiddenInputSignature.setAttribute('name', 'razorpay_signature');
+            hiddenInputSignature.setAttribute('value', response.razorpay_signature);
+            form.appendChild(hiddenInputSignature);
+
+            form.submit();
+        },
+        "prefill": {
+            "name": "Your Name",
+            "email": "your_email@example.com",
+            "contact": "9999999999"
+        },
+        "theme": {
+            "color": "#F37254"
+        }
+    };
+    var rzp1 = new Razorpay(options);
+    document.getElementById('razorpay-button').onclick = function(e) {
+        rzp1.open();
+        e.preventDefault();
+    }
+</script>
+{% endblock %}

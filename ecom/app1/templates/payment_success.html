@@ -1,7 +1,8 @@
+{% extends 'base.html' %}
+{% block content %}
 <h2>Payment Successful!</h2>
-<p>Payment ID: {{ payment.razorpay_payment_id }}</p>
-<p>Order ID: {{ payment.order.id }}</p>
 <p>Thank you for your payment.</p>
+
 
 <!-- Add this script to redirect after 5 seconds -->
 <script>
@@ -9,4 +10,4 @@
         window.location.href = "{% url 'home' %}";  // Redirect to the home page
     }, 5000);  // 5000 milliseconds = 5 seconds
 </script>
-
+{% endblock %}

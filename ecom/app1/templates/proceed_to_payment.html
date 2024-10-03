@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Proceed to Payment</h2>
+<p>Total Amount: {{ total_amount|floatformat:2 }}</p> <!-- Display amount in INR -->
+<form action="{% url 'proceed_to_payment' %}" method="POST">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Pay Now</button>
+</form>
+{% endblock %}
