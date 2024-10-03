@@ -4,8 +4,10 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
 from django.http import HttpResponse
-from .models import Product, Order, Feedback1,Payment
-from .forms import OrderForm, FeedbackForm
+from .models import Product, Order, Feedback1,Payment,UserProfile
+from .forms import OrderForm, FeedbackForm,CustomUserCreationForm
+from django.views.decorators.csrf import csrf_exempt
+
 
 def home(request):
     products = Product.objects.all()
@@ -13,12 +15,25 @@ def home(request):
 
 def register(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = CustomUserCreationForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+
+            # Save additional fields in UserProfile
+            phone_number = form.cleaned_data.get('phone_number')
+            address = form.cleaned_data.get('address')
+            pin_code = form.cleaned_data.get('pin_code')
+
+            UserProfile.objects.create(
+                user=user, 
+                phone_number=phone_number,
+                address=address,
+                pin_code=pin_code
+            )
+
             return redirect('login')
     else:
-        form = UserCreationForm()
+        form = CustomUserCreationForm()
     return render(request, 'register.html', {'form': form})
 
 def login(request):
@@ -123,7 +138,7 @@ def initiate_payment(request, order_id):
 
     return render(request, 'payment.html', context)
 
-
+@csrf_exempt
 def payment_success(request):
     if request.method == 'POST':
         razorpay_payment_id = request.POST.get('razorpay_payment_id')
@@ -137,9 +152,9 @@ def payment_success(request):
             payment.status = 'Paid'
             payment.save()
 
-            # You can also add verification of the payment signature here
-
-            return render(request, 'payment_success.html', {'payment': payment})
+            # Redirect to the home page after successful payment
+            return redirect('home')
         except Payment.DoesNotExist:
             return HttpResponse("Payment not found.")
+    
     return redirect('home')
