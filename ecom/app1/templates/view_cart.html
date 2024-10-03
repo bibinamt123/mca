@@ -1,16 +1,83 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Your Cart</h2>
-{% if cart_items %}
-    <ul>
-        {% for item in cart_items %}
-            <li>
-                {{ item.product.name }} - {{ item.quantity }} - {{ item.product.price }} 
-            </li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'proceed_to_payment' %}" class="btn btn-primary">Proceed to Payment</a>
-{% else %}
-    <p>Your cart is empty.</p>
-{% endif %}
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        padding: 20px;
+    }
+
+    .cart-container {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        max-width: 600px;
+        margin: auto;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #007bff;
+    }
+
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    li {
+        display: flex;
+        justify-content: space-between;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    li:last-child {
+        border-bottom: none;
+    }
+
+    .btn-primary {
+        display: block;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-align: center;
+        margin: 20px auto;
+        width: fit-content;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+    .empty-cart-message {
+        text-align: center;
+        font-size: 1.2em;
+        margin-top: 20px;
+    }
+</style>
+
+<div class="cart-container">
+    <h2>Your Cart</h2>
+    {% if cart_items %}
+        <ul>
+            {% for item in cart_items %}
+                <li>
+                    <span>{{ item.product.name }}</span>
+                    <span>Quantity: {{ item.quantity }}</span>
+                    <span>Price: ₹{{ item.product.price|floatformat:2 }}</span>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{% url 'proceed_to_payment' %}" class="btn btn-primary">Proceed to Payment</a>
+    {% else %}
+        <p class="empty-cart-message">Your cart is empty.</p>
+    {% endif %}
+</div>
 {% endblock %}
