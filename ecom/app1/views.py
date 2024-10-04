@@ -92,6 +92,15 @@ def view_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
     return render(request, 'view_cart.html', {'cart_items': cart_items})
 
+def update_cart_quantity(request, product_id):
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 1))
+        cart_item = get_object_or_404(Cart, user=request.user, product_id=product_id)
+        if quantity > 0:
+            cart_item.quantity = quantity+1
+            cart_item.save()
+        return redirect('view_cart')
+
 def feedback(request):
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
