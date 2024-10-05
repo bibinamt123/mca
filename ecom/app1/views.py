@@ -125,30 +125,54 @@ def total_orders_view(request):
     total_orders = Order.objects.count()
     return render(request, 'total_orders.html', {'total_orders': total_orders})
 
+def delivery_address(request):
+    cart_items = Cart.objects.filter(user=request.user)
+
+    if request.method == 'POST':
+        address = request.POST.get('address')
+        phone_number = request.POST.get('phone_number')
+        pin_code = request.POST.get('pin_code')
+
+        # Create an order for each cart item
+        for item in cart_items:
+            Order.objects.create(
+                user=request.user,
+                product=item.product,
+                quantity=item.quantity,
+                address=address,
+                phone_number=phone_number,
+                pin_code=pin_code
+            )
+
+        return redirect('proceed_to_payment')  # Redirect to the payment page
+
+    return render(request, 'delivery_address.html')
+
+
 razorpay_client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
 
 
 def proceed_to_payment(request):
     cart_items = Cart.objects.filter(user=request.user)
-    
-    # Calculate the total amount for display (in INR)
-    total_amount_display = sum(item.product.price * item.quantity for item in cart_items)  # Amount in INR
+
+    # Calculate total amount in INR
+    total_amount_display = sum(item.product.price * item.quantity for item in cart_items)
 
     if request.method == "POST":
-        # Create a new order in Razorpay (convert to paise)
-        total_amount = int(total_amount_display * 100)  # Amount in paise for Razorpay
+        total_amount = int(total_amount_display * 100)  # Convert to paise for Razorpay
 
+        # Create an order in Razorpay
         order_data = {
-            'amount': total_amount,  # Amount in paise
+            'amount': total_amount,
             'currency': 'INR',
-            'payment_capture': '1',  # Auto capture
+            'payment_capture': '1',
         }
-        order = razorpay_client.order.create(data=order_data)
-        
-        # Render the payment page with the order details
+        razorpay_order = razorpay_client.order.create(data=order_data)
+
+        # Render payment page with Razorpay order details
         return render(request, 'payment.html', {
-            'order_id': order['id'], 
-            'total_amount': total_amount_display  # Use the display amount (not converted to paise)
+            'order_id': razorpay_order['id'],
+            'total_amount': total_amount_display
         })
 
     return render(request, 'proceed_to_payment.html', {'total_amount': total_amount_display})
@@ -158,12 +182,10 @@ def proceed_to_payment(request):
 @csrf_exempt
 def payment_success(request):
     if request.method == "POST":
-        # Get the payment details
         razorpay_payment_id = request.POST.get('razorpay_payment_id')
         razorpay_order_id = request.POST.get('razorpay_order_id')
         razorpay_signature = request.POST.get('razorpay_signature')
 
-        # Verify the payment signature
         params_dict = {
             'razorpay_order_id': razorpay_order_id,
             'razorpay_payment_id': razorpay_payment_id,
@@ -171,20 +193,12 @@ def payment_success(request):
         }
 
         try:
-            # Verify payment signature
             razorpay_client.utility.verify_payment_signature(params_dict)
-
-            # If verification is successful, you can proceed to mark the order as paid
-            # (e.g., updating the order status in your database)
-
-            # Clear the cart after successful payment
+            # Clear the cart after payment success
             Cart.objects.filter(user=request.user).delete()
 
-            # Redirect to the home page or a success page
-            return redirect('home')  # Replace 'home' with your home URL name
-
-        except Exception as e:
-            # Handle payment verification failure
-            return render(request, 'payment_failed.html', {'error': str(e)})
+            return redirect('home')
+        except:
+            return render(request, 'payment_failed.html')
 
     return render(request, 'payment_failed.html')

@@ -104,7 +104,8 @@
                 </li>
             {% endfor %}
         </ul>
-        <a href="{% url 'proceed_to_payment' %}" class="btn btn-primary">Proceed to Payment</a>
+        <a href="{% url 'delivery_address' %}" class="btn btn-primary">Proceed to Delivery Address</a>
+
     {% else %}
         <p class="empty-cart-message">Your cart is empty.</p>
     {% endif %}
