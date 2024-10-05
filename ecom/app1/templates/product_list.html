@@ -14,7 +14,7 @@
 
     h2 {
         text-align: center;
-        color: #333;
+        color: #ffffff;
         margin-bottom: 20px;
         font-size: 2.5rem; /* Larger font size for the heading */
     }
@@ -23,6 +23,8 @@
         display: flex;
         flex-wrap: wrap; /* Allows cards to wrap to the next line */
         justify-content: center; /* Center the product cards */
+        width: 150%;
+        margin-left: -290px;
     }
 
     .col-md-4 {
@@ -45,6 +47,10 @@
     .card-img-top {
         max-height: 200px; /* Fixed height for product images */
         object-fit: cover; /* Ensures images cover the area without distortion */
+        width: 100%;         /* Set the image width to fill the card's width */
+        height: 200px;        /* Fixed height for all images */
+        object-fit: cover;    /* Ensures the image covers the area without distortion */
+        object-position: center; /* Center the image within the card */
     }
 
     .card-body {
@@ -90,7 +96,7 @@
 <h2>Products</h2>
 <div class="row">
     {% for product in products %}
-        <div class="col-md-4">
+        <div class="col-md-3">
             <div class="card mb-4">
                 <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
                 <div class="card-body">
