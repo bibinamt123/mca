@@ -1,13 +1,26 @@
 from django.contrib import admin
-from .models import Product, Order, DeliveryBoy, Feedback1
+from .models import Product, Order, DeliveryBoy, Feedback1,Cart,Payment
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('name', 'price', 'description','image')
+    list_display = ('name', 'price', 'description', 'image', 'manufacture_date', 'expiry_date', 'quantity')
+    list_editable = ('quantity',)
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'product', 'quantity', 'address', 'created_at')
+    list_display = ('user', 'product', 'quantity', 'address', 'created_at', 'payment_status')  # Added payment_status field
+
+    # Method to display payment status in the admin panel
+    def payment_status(self, obj):
+        # Check if the payment exists for the order
+        payment = Payment.objects.filter(order=obj).first()
+        if payment:
+            return payment.status  # Shows the payment status (e.g., 'Pending', 'Success')
+        return "Not Paid"  # Default message if no payment is found
+
+    payment_status.short_description = 'Payment Status'
+
+
 
 @admin.register(DeliveryBoy)
 class DeliveryBoyAdmin(admin.ModelAdmin):

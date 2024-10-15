@@ -31,6 +31,22 @@
         margin-bottom: 30px;
     }
 
+    label {
+        display: block;
+        text-align: left;
+        font-size: 0.9em;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        font-size: 1em;
+    }
+
     .btn-primary {
         background-color: #007bff;
         color: white;
@@ -39,6 +55,8 @@
         border-radius: 5px;
         cursor: pointer;
         transition: background-color 0.3s ease;
+        width: 100%;
+        font-size: 1em;
     }
 
     .btn-primary:hover {
@@ -46,12 +64,24 @@
     }
 </style>
 
-
 <div class="payment-container">
     <h2>Proceed to Payment</h2>
     <p>Total Amount: ₹{{ total_amount|floatformat:2 }}</p> <!-- Display amount in INR -->
+    
     <form action="{% url 'proceed_to_payment' %}" method="POST">
         {% csrf_token %}
+        <!-- Address Input Field -->
+        <label for="address">Delivery Address:</label>
+        <input type="text" name="address" id="address" required placeholder="Enter your delivery address">
+
+        <!-- Phone Number Input Field -->
+        <label for="phone_number">Phone Number:</label>
+        <input type="text" name="phone_number" id="phone_number" required placeholder="Enter your phone number">
+
+        <!-- Pin Code Input Field -->
+        <label for="pin_code">Pin Code:</label>
+        <input type="text" name="pin_code" id="pin_code" required placeholder="Enter your pin code">
+
         <button type="submit" class="btn btn-primary">Pay Now</button>
     </form>
 </div>

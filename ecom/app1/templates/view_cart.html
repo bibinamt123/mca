@@ -86,20 +86,46 @@
     .update-btn:hover {
         background-color: #0056b3;
     }
+
+    .alert-container {
+        margin-bottom: 20px; /* Add some space below the alert */
+    }
+
+    .text-danger {
+        color: red; /* Style for out of stock message */
+        font-weight: bold;
+    }
 </style>
 
 <div class="cart-container">
     <h2>Your Cart</h2>
+
+    {% if messages %}
+        <div class="alert-container">
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
     {% if cart_items %}
         <ul>
             {% for item in cart_items %}
                 <li>
                     <span>{{ item.product.name }}</span>
-                    <form class="quantity-form" method="post" action="{% url 'update_cart_quantity' item.product.id %}">
-                        {% csrf_token %}
-                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1">
-                        <button type="submit" class="update-btn">Update</button>
-                    </form>
+                    
+                    {% if item.product.quantity == 0 %}
+                        <p class="text-danger">Out of Stock</p>
+                    {% else %}
+                        <form class="quantity-form" method="post" action="{% url 'update_cart_quantity' item.product.id %}">
+                            {% csrf_token %}
+                            <input type="number" name="quantity" value="{{ item.quantity }}" min="0" max="{{ item.product.quantity }}">
+                            <button type="submit" class="update-btn">Update</button>
+                        </form>
+                    {% endif %}
+                    
                     <span>Price: ₹{{ item.product.price|floatformat:2 }}</span>
                 </li>
             {% endfor %}
