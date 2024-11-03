@@ -2,87 +2,142 @@
 {% block content %}
 <style>
     body {
-        font-family: Arial, sans-serif;
+        font-family: 'Arial', sans-serif;
         background-color: #f4f4f4;
         color: #333;
+        margin: 0;
+        padding: 0;
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 100vh;
-        margin: 0;
+        height: 100vh; /* Ensures the body takes up the full height of the viewport */
+    }
+
+    .wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh; /* Ensures full viewport height is used */
     }
 
     .payment-container {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        width: 300px;
+        background-color: #fff;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        padding: 25px;
+        width: 350px;
         text-align: center;
+        transition: box-shadow 0.3s ease;
+    }
+
+    .payment-container:hover {
+        box-shadow: 0 12px 24px rgba(0, 0, 0, 0.3);
     }
 
     h2 {
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         color: #007bff;
+        font-size: 1.6em;
+        letter-spacing: 0.5px;
     }
 
     p {
-        font-size: 1.2em;
+        font-size: 1.3em;
         margin-bottom: 30px;
+        color: #555;
     }
 
     label {
         display: block;
         text-align: left;
-        font-size: 0.9em;
-        margin-bottom: 5px;
+        font-size: 0.95em;
+        margin-bottom: 8px;
+        color: #333;
+        font-weight: bold;
     }
 
     input[type="text"] {
         width: 100%;
-        padding: 10px;
-        margin-bottom: 15px;
-        border-radius: 5px;
+        padding: 12px;
+        margin-bottom: 20px;
+        border-radius: 8px;
         border: 1px solid #ccc;
         font-size: 1em;
+        background-color: #f9f9f9;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        transition: border-color 0.3s ease;
+    }
+
+    input[type="text"]:focus {
+        border-color: #007bff;
+        outline: none;
     }
 
     .btn-primary {
         background-color: #007bff;
         color: white;
         border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
+        padding: 12px 25px;
+        border-radius: 8px;
         cursor: pointer;
-        transition: background-color 0.3s ease;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
         width: 100%;
-        font-size: 1em;
+        font-size: 1.1em;
+        font-weight: bold;
     }
 
     .btn-primary:hover {
         background-color: #0056b3;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary:active {
+        background-color: #004085;
+        box-shadow: none;
+    }
+
+    /* Additional styling for mobile responsiveness */
+    @media (max-width: 400px) {
+        .payment-container {
+            width: 90%;
+            padding: 15px;
+        }
+
+        h2 {
+            font-size: 1.4em;
+        }
+
+        p {
+            font-size: 1.1em;
+        }
+
+        input[type="text"], .btn-primary {
+            font-size: 0.95em;
+        }
     }
 </style>
 
-<div class="payment-container">
-    <h2>Proceed to Payment</h2>
-    <p>Total Amount: ₹{{ total_amount|floatformat:2 }}</p> <!-- Display amount in INR -->
-    
-    <form action="{% url 'proceed_to_payment' %}" method="POST">
-        {% csrf_token %}
-        <!-- Address Input Field -->
-        <label for="address">Delivery Address:</label>
-        <input type="text" name="address" id="address" required placeholder="Enter your delivery address">
+<div class="wrapper">
+    <div class="payment-container">
+        <h2>Proceed to Payment</h2>
+        <p>Total Amount: ₹{{ total_amount|floatformat:2 }}</p> <!-- Display amount in INR -->
+        
+        <form action="{% url 'proceed_to_payment' %}" method="POST">
+            {% csrf_token %}
+            <!-- Address Input Field -->
+            <label for="address">Delivery Address:</label>
+            <input type="text" name="address" id="address" required placeholder="Enter your delivery address">
 
-        <!-- Phone Number Input Field -->
-        <label for="phone_number">Phone Number:</label>
-        <input type="text" name="phone_number" id="phone_number" required placeholder="Enter your phone number">
+            <!-- Phone Number Input Field -->
+            <label for="phone_number">Phone Number:</label>
+            <input type="text" name="phone_number" id="phone_number" required placeholder="Enter your phone number">
 
-        <!-- Pin Code Input Field -->
-        <label for="pin_code">Pin Code:</label>
-        <input type="text" name="pin_code" id="pin_code" required placeholder="Enter your pin code">
+            <!-- Pin Code Input Field -->
+            <label for="pin_code">Pin Code:</label>
+            <input type="text" name="pin_code" id="pin_code" required placeholder="Enter your pin code">
 
-        <button type="submit" class="btn btn-primary">Pay Now</button>
-    </form>
+            <button type="submit" class="btn btn-primary">Pay Now</button>
+        </form>
+    </div>
 </div>
 {% endblock %}

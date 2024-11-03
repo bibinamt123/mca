@@ -169,8 +169,17 @@ def feedback_success(request):
 
 
 def total_orders_view(request):
-    total_orders = Order.objects.count()
-    return render(request, 'total_orders.html', {'total_orders': total_orders})
+    # Fetch all orders from the database
+    orders = Order.objects.all()
+
+    # Count the total number of orders
+    total_orders = orders.count()
+
+    # Pass both the total orders count and the list of orders to the template
+    return render(request, 'total_orders.html', {
+        'total_orders': total_orders,
+        'orders': orders  # Pass the orders to the template
+    })
 
 def delivery_address(request):
     cart_items = Cart.objects.filter(user=request.user)

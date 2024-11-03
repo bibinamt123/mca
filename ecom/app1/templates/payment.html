@@ -1,13 +1,103 @@
 {% extends 'base.html' %}
 {% block content %}
-<h2>Payment</h2>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+        height: 100vh; /* Full height of viewport */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .payment-container {
+        background-color: white;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        padding: 30px;
+        text-align: center;
+        max-width: 400px;
+        width: 100%;
+    }
+
+    h2 {
+        font-size: 1.8em;
+        color: #007bff;
+        margin-bottom: 20px;
+    }
+
+    p {
+        font-size: 1.2em;
+        color: #555;
+        margin-bottom: 30px;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        color: white;
+        border: none;
+        padding: 12px 25px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+        width: 100%;
+        font-size: 1.1em;
+        font-weight: bold;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-primary:active {
+        background-color: #004085;
+        box-shadow: none;
+    }
+
+    .razorpay-logo {
+        display: block;
+        margin: 20px auto;
+        width: 120px;
+        height: auto;
+    }
+
+    /* Mobile responsiveness */
+    @media (max-width: 600px) {
+        .payment-container {
+            padding: 20px;
+        }
+
+        h2 {
+            font-size: 1.6em;
+        }
+
+        p {
+            font-size: 1.1em;
+        }
+
+        .btn-primary {
+            font-size: 1em;
+        }
+    }
+</style>
+
+<div class="payment-container">
+    <h2>Payment</h2>
+    <p>Secure Payment with Razorpay</p>
+    <img class="razorpay-logo" src="https://example.com/your_logo" alt="Company Logo">
+    
+    <form action="{% url 'payment_success' %}" method="POST" id="razorpay-form">
+        {% csrf_token %}
+        <input type="hidden" name="order_id" value="{{ order_id }}">
+        <input type="hidden" name="total_amount" value="{{ total_amount }}">
+        <button type="button" id="razorpay-button" class="btn btn-primary">Pay with Razorpay</button>
+    </form>
+</div>
+
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
-<form action="{% url 'payment_success' %}" method="POST" id="razorpay-form">
-    {% csrf_token %}
-    <input type="hidden" name="order_id" value="{{ order_id }}">
-    <input type="hidden" name="total_amount" value="{{ total_amount }}">
-    <button type="button" id="razorpay-button" class="btn btn-primary">Pay with Razorpay</button>
-</form>
 <script>
     var options = {
         "key": "{{ settings.RAZORPAY_KEY_ID }}",
@@ -18,7 +108,6 @@
         "image": "https://example.com/your_logo",
         "order_id": "{{ order_id }}",
         "handler": function (response) {
-            // Append the response data to the form and submit it
             var form = document.getElementById('razorpay-form');
             var hiddenInputPaymentId = document.createElement('input');
             hiddenInputPaymentId.setAttribute('type', 'hidden');
@@ -51,7 +140,8 @@
     };
     var rzp1 = new Razorpay(options);
     document.getElementById('razorpay-button').onclick = function(e) {
-        rzp1.open();
+        rzp1.open();  
+         
         e.preventDefault();
     }
 </script>
