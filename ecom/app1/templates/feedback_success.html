@@ -1,10 +1,11 @@
-<!-- feedback_success.html -->
 {% extends 'base.html' %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="alert alert-success text-center">
-        <h4>Thank you for your feedback!</h4>
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+    <div class="alert alert-success text-center shadow-lg p-5" style="border-radius: 12px; max-width: 600px;">
+        <h4 class="mb-3" style="font-weight: bold; color: #155724;">Thank you for your feedback!</h4>
+        <p style="color: #155724;">We appreciate your input and will use it to improve our services.</p>
+        <a href="{% url 'home' %}" class="btn btn-primary mt-4" style="border-radius: 8px; padding: 10px 20px;">Return to Home</a>
     </div>
 </div>
 {% endblock %}

@@ -1,39 +1,55 @@
 {% extends 'base.html' %}
+{% load static %}
 {% block content %}
 <style>
     body {
         font-family: Arial, sans-serif;
-        background-color: #f4f4f4;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("{% static 'images/product.jpg' %}");
+        background-size: 100% 300%;
+        background-position: center;
+        background-repeat: no-repeat;
         color: #333;
         padding: 20px;
     }
 
     .cart-container {
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        max-width: 600px;
+        background-color: rgba(255, 255, 255, 0.9);
+        border-radius: 12px;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        padding: 30px;
+        max-width: 700px;
         margin: auto;
+        text-align: center;
+        margin-top: 100px;
     }
 
     h2 {
         text-align: center;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
         color: #007bff;
+        font-size: 1.8em;
+        font-weight: 700;
+        border-bottom: 2px solid #ddd;
+        padding-bottom: 10px;
     }
 
     ul {
         list-style: none;
         padding: 0;
+        margin-top: 10px;
     }
 
     li {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        padding: 10px;
+        padding: 12px;
         border-bottom: 1px solid #ddd;
+        transition: background-color 0.3s ease;
+    }
+
+    li:hover {
+        background-color: #f7f7f7;
     }
 
     li:last-child {
@@ -41,81 +57,94 @@
     }
 
     .btn-primary {
-        display: block;
+        display: inline-block;
         background-color: #007bff;
         color: white;
         border: none;
-        padding: 10px 20px;
-        border-radius: 5px;
+        padding: 12px 25px;
+        border-radius: 25px;
         text-align: center;
-        margin: 20px auto;
+        margin: 25px auto 0;
         width: fit-content;
-        transition: background-color 0.3s ease;
+        font-size: 1.1em;
+        font-weight: bold;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        text-transform: uppercase;
     }
 
     .btn-primary:hover {
         background-color: #0056b3;
+        transform: scale(1.05);
     }
 
     .empty-cart-message {
         text-align: center;
         font-size: 1.2em;
-        margin-top: 20px;
+        margin-top: 25px;
+        font-weight: bold;
+        color: #555;
     }
 
     .quantity-form {
-        display: inline-block;
-        margin-right: 10px;
+        display: inline-flex;
+        align-items: center;
     }
 
     input[type="number"] {
         width: 50px;
         padding: 5px;
         text-align: center;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-right: 8px;
+        outline: none;
+        transition: border-color 0.3s ease;
+    }
+
+    input[type="number"]:focus {
+        border-color: #007bff;
     }
 
     .update-btn {
-        padding: 5px 10px;
-        background-color: #007bff;
+        padding: 6px 12px;
+        background-color: #28a745;
         color: white;
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        transition: background-color 0.3s ease;
     }
 
     .update-btn:hover {
-        background-color: #0056b3;
+        background-color: #218838;
     }
 
     .alert-container {
-        margin-bottom: 20px; /* Add some space below the alert */
+        margin-bottom: 20px;
     }
 
     .text-danger {
-        color: red; /* Style for out of stock message */
+        color: #dc3545;
         font-weight: bold;
+        font-size: 0.9em;
+    }
+
+    .price {
+        font-size: 1.1em;
+        font-weight: bold;
+        color: #333;
     }
 </style>
 
-<div class="cart-container">
+<div class="cart-container" >
     <h2>Your Cart</h2>
-
-    {% if messages %}
-        <div class="alert-container">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
 
     {% if cart_items %}
         <ul>
             {% for item in cart_items %}
                 <li>
                     <span>{{ item.product.name }}</span>
-                    
+
                     {% if item.product.quantity == 0 %}
                         <p class="text-danger">Out of Stock</p>
                     {% else %}
@@ -125,14 +154,12 @@
                             <button type="submit" class="update-btn">Update</button>
                         </form>
                     {% endif %}
-                    
-                    <span>Price: ₹{{ item.product.price|floatformat:2 }}</span>
+
+                    <span class="price">Price: ₹{{ item.product.price|floatformat:2 }}</span>
                 </li>
             {% endfor %}
         </ul>
         <a href="{% url 'proceed_to_payment' %}" class="btn btn-primary">Proceed to Payment</a>
-        <!-- <a href="{% url 'delivery_address' %}" class="btn btn-primary">Proceed to Delivery Address</a> -->
-
     {% else %}
         <p class="empty-cart-message">Your cart is empty.</p>
     {% endif %}

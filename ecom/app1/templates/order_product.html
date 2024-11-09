@@ -1,9 +1,159 @@
 {% extends 'base.html' %}
+
 {% block content %}
-    <h2>Order Product</h2>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit" class="btn btn-primary">Place Order</button>
-    </form>
+<style>
+    /* Page background */
+    body {
+        font-family: 'Arial', sans-serif;
+        background: linear-gradient(to right, #f6f7f8, #dbe2e6);
+        padding: 0;
+        margin: 0;
+    }
+
+    /* Container styling */
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin-top: 0;
+    }
+
+    /* Card container */
+    .card {
+        border-radius: 15px;
+        border: none;
+        background-color: #ffffff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Card Header */
+    .card-header {
+        background: linear-gradient(to right, #007bff, #0056b3);
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+        color: white;
+        font-size: 1.6em;
+        font-weight: bold;
+        text-align: center;
+        padding: 20px;
+    }
+
+    /* Card Body */
+    .card-body {
+        padding: 30px;
+        font-size: 1.1em;
+        color: #333;
+    }
+
+    .form-group {
+        margin-bottom: 20px;
+    }
+
+    /* Label and Input Fields */
+    .form-label {
+        font-weight: 600;
+        color: #333;
+    }
+
+    .form-control {
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        padding: 12px;
+        font-size: 1.1em;
+        transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    /* Form error messages */
+    .text-danger {
+        color: #e74c3c;
+        font-weight: bold;
+    }
+
+    /* Submit Button */
+    .btn-success {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 12px 30px;
+        border-radius: 8px;
+        font-size: 1.1em;
+        font-weight: bold;
+        text-transform: uppercase;
+        transition: background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-success:active {
+        background-color: #1e7e34;
+        box-shadow: none;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 576px) {
+        .card-body {
+            padding: 20px;
+        }
+
+        .form-control {
+            font-size: 1em;
+        }
+
+        .btn-success {
+            padding: 10px 25px;
+        }
+    }
+</style>
+
+<div class="container">
+    <div class="card shadow-lg">
+        <div class="card-header">
+            <h2 class="mb-0">Order Product</h2>
+        </div>
+        <div class="card-body">
+            <form method="post" class="p-3">
+                {% csrf_token %}
+                
+                <!-- Display form fields with custom styling -->
+                <div class="form-group">
+                    {{ form.non_field_errors }}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label_tag }}</label>
+                            {{ field|add_class:"form-control" }}  <!-- Adding Bootstrap styling to form fields -->
+                            {% if field.help_text %}
+                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                            {% endif %}
+                            {% if field.errors %}
+                                <div class="text-danger">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Styled submit button -->
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success btn-lg">Place Order</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

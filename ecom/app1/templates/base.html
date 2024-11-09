@@ -6,25 +6,78 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bakery Website</title>
     <link href="css/font-awesome.min.css" rel="stylesheet" />
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <style>
-        /* Custom styles */
-        .navbar-nav .nav-item.active .nav-link {
-            font-weight: bold;
-            color: #007bff;
+        /* Custom styles for the navbar */
+        .navbar {
+            background-color: #ffb347; /* Light orange background color */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow */
         }
         .navbar-brand img {
             height: 40px; /* Adjust logo size */
+            transition: transform 0.3s ease;
+        }
+        .navbar-brand img:hover {
+            transform: scale(1.1); /* Slight zoom on hover */
+        }
+        .navbar-nav .nav-item .nav-link {
+            color: #333;
+            font-weight: 500;
+            padding: 10px 15px;
+            transition: color 0.3s ease, background-color 0.3s ease;
+        }
+        .navbar-nav .nav-item.active .nav-link,
+        .navbar-nav .nav-item .nav-link:hover {
+            color: #fff; /* White color for active and hover states */
+            background-color: #ff8c00; /* Darker orange background for hover and active */
+            border-radius: 4px; /* Rounded corners for active link */
+        }
+        .navbar-toggler {
+            border-color: #ff8c00; /* Matching border color */
+        }
+        .navbar-toggler-icon {
+            color: #ff8c00; /* Matching color for toggler icon */
+        }
+        
+        /* Dropdown menu */
+        .nav-item.dropdown .dropdown-menu {
+            background-color: #ff8c00; /* Dark orange for dropdown menu */
+            border-radius: 6px;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow for dropdown */
+        }
+        .nav-item.dropdown .dropdown-menu .dropdown-item {
+            color: #fff;
+            padding: 8px 15px;
+        }
+        .nav-item.dropdown .dropdown-menu .dropdown-item:hover {
+            background-color: #ffb347; /* Light orange for hover state */
+            color: #333;
+        }
+
+        /* Cart icon styling */
+        .nav-link i.fa-cart-shopping {
+            color: #333;
+            font-size: 1.2em;
+        }
+        .badge-primary {
+            background-color: #ff8c00; /* Badge color */
+            color: #fff;
+            font-size: 0.8em;
+        }
+
+        /* Additional styling */
+        .container {
+            margin-top: 80px; /* To avoid overlap with fixed navbar */
         }
     </style>
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top"> <!-- Fixed navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light fixed-top"> <!-- Fixed navbar -->
         <a class="navbar-brand" href="{% url 'home' %}">
-            <img src="{% static 'Images/logo.jpg' %}" alt="Bakery Logo"> <!-- Add logo image -->
+            <img src="{% static 'images/logo.png' %}" alt="Bakery Logo"> <!-- Add logo image -->
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -34,13 +87,9 @@
                 <li class="nav-item{% if request.resolver_match.url_name == 'home' %} active{% endif %}">
                     <a class="nav-link" href="{% url 'home' %}">Home</a>
                 </li>
-            
                 <li class="nav-item{% if request.resolver_match.url_name == 'product_list' %} active{% endif %}">
                     <a class="nav-link" href="{% url 'product_list' %}">Products</a>
                 </li>
-                {% comment %} <li class="nav-item{% if request.resolver_match.url_name == 'order_product' %} active{% endif %}"> 
-                    <a class="nav-link" href="{% url 'order_product' %}">Order</a> 
-                </li> {% endcomment %}
                 <li class="nav-item{% if request.resolver_match.url_name == 'feedback' %} active{% endif %}">
                     <a class="nav-link" href="{% url 'feedback' %}">Feedback</a>
                 </li>
@@ -52,7 +101,6 @@
                 </li>
             </ul>
             <ul class="navbar-nav ml-auto">
-
                 <li class="nav-item{% if request.resolver_match.url_name == 'cart' %} active{% endif %}">
                     <a class="nav-link" href="{% url 'view_cart' %}">
                         <i class="fa-solid fa-cart-shopping"></i>

@@ -1,11 +1,119 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
 <div class="container mt-5">
+    <style>
+        /* Container styling */
+        body {
+           font-family: Arial, sans-serif;
+           background-image: url("{% static 'images/product.jpg' %}");
+           background-size: cover;
+           background-size: 100% 300%;
+           background-position: center;
+           background-repeat: no-repeat;
+           color: #333;
+           padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            padding-top: 20px;
+            padding-bottom: 40px;
+        }
+
+        /* Card styling with gradient */
+        .card {
+            background: linear-gradient(135deg, #e3f2fd, #ffffff);
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        /* Card header with gradient text */
+        .card-header {
+            background-color: transparent;
+            color: #007bff;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        /* Form field styling with rounded borders */
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group input, .form-group select, .form-group textarea {
+            border-radius: 12px;
+            border: 1px solid #ddd;
+            padding: 10px;
+            width: 100%;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+        }
+
+        /* Submit button with gradient background */
+        .btn-success {
+            background: linear-gradient(135deg, #28a745, #218838);
+            color: #fff;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            padding: 10px 30px;
+            transition: background 0.3s ease, transform 0.3s;
+        }
+        .btn-success:hover {
+            background: linear-gradient(135deg, #218838, #28a745);
+            transform: translateY(-3px);
+        }
+
+        /* Feedback card styling */
+        .feedback-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            padding: 20px;
+            transition: transform 0.3s;
+        }
+        .feedback-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+        .feedback-card h5 {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .feedback-card .card-text {
+            color: #333;
+        }
+        .feedback-card .text-muted {
+            color: #6c757d;
+        }
+
+        /* Admin reply styling */
+        .feedback-card .admin-reply {
+            color: #28a745;
+            font-weight: bold;
+            font-style: italic;
+        }
+    </style>
+
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card shadow-lg">
-                <div class="card-header bg-primary text-white text-center">
-                    <h2 class="mb-0">Leave Feedback</h2>
+                <div class="card-header">
+                    Leave Feedback
                 </div>
                 <div class="card-body">
                     <form method="post">
@@ -35,14 +143,14 @@
             </div>
         </div>
     </div>
-</div>
 
-{% comment %} <div class="container mt-5">
-    <div class="row justify-content-center">
+    <!-- Uncomment the section below if you want to display the list of feedbacks -->
+    <!--
+    <div class="row justify-content-center mt-5">
         <div class="col-md-10">
-            <h2>Your Feedback</h2>
+            <h2 class="text-center">Your Feedback</h2>
             {% for feedback in feedbacks %}
-                <div class="card mt-3">
+                <div class="feedback-card">
                     <div class="card-header">
                         Feedback for {{ feedback.product.name }}
                     </div>
@@ -50,7 +158,7 @@
                         <h5 class="card-title">Rating: {{ feedback.rating }}</h5>
                         <p class="card-text">Comment: {{ feedback.comment }}</p>
                         {% if feedback.reply %}
-                            <p class="card-text"><strong>Admin Reply:</strong> {{ feedback.reply }}</p>
+                            <p class="card-text admin-reply"><strong>Admin Reply:</strong> {{ feedback.reply }}</p>
                         {% else %}
                             <p class="card-text text-muted">No reply from admin yet.</p>
                         {% endif %}
@@ -59,5 +167,6 @@
             {% endfor %}
         </div>
     </div>
-</div> {% endcomment %}
+    -->
+</div>
 {% endblock %}

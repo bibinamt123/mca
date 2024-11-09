@@ -1,5 +1,7 @@
 import razorpay
 from django.conf import settings
+from django.contrib.auth.decorators import login_required
+
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
 from django.contrib.auth.forms import UserCreationForm
@@ -54,12 +56,12 @@ def logout(request):
     return redirect('home')
 
 
-
+@login_required
 def product_list(request):
     products = Product.objects.all()  # This should retrieve all products
     return render(request, 'product_list.html', {'products': products})
 
-
+@login_required
 def add_to_cart(request, product_id):
     product = get_object_or_404(Product, id=product_id)
 
@@ -78,10 +80,12 @@ def add_to_cart(request, product_id):
         messages.error(request, "Sorry, this product is out of stock.")  # Out of stock message
     return redirect('product_list')  # Redirect back to product list
 
+@login_required
 def view_cart(request):
     cart_items = Cart.objects.filter(user=request.user)
     return render(request, 'view_cart.html', {'cart_items': cart_items})
 
+@login_required
 def update_cart_quantity(request, product_id):
     if request.method == 'POST':
         quantity = int(request.POST.get('quantity', 1))
@@ -99,6 +103,7 @@ def update_cart_quantity(request, product_id):
 
         return redirect('view_cart')
 
+@login_required
 def feedback(request):
     if request.method == 'POST':
         form = FeedbackForm(request.POST)
@@ -111,13 +116,16 @@ def feedback(request):
         form = FeedbackForm()
     return render(request, 'feedback.html', {'form': form})
 
+@login_required
 def user_feedbacks(request):
     feedbacks = Feedback1.objects.filter(user=request.user)
     return render(request, 'user_feedbacks.html', {'feedbacks': feedbacks})
 
+@login_required
 def feedback_success(request):
     return render(request, 'feedback_success.html')
 
+@login_required
 def total_orders_view(request):
     orders = Order.objects.filter(user=request.user).order_by('-created_at')
 
@@ -143,7 +151,7 @@ def total_orders_view(request):
         'order_details': order_details,
     })
 
-
+@login_required
 def delivery_address(request):
     cart_items = Cart.objects.filter(user=request.user)
 

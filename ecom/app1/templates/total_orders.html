@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
 <h2 class="header">Your Orders</h2>
 {% if order_details %}
@@ -37,15 +39,17 @@
     /* General Styling */
     body {
         font-family: Arial, sans-serif;
-        background-color: #f5f5f5;
-        color: #333;
+        background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("{% static 'images/product.jpg' %}");
+        background-size: 100% 300%;
+        background-position: center;
+        background-repeat: no-repeat;        color: #333;
     }
 
     .header {
         text-align: center;
         color: #007bff;
         font-size: 1.8em;
-        margin-bottom: 1em;
+        margin-bottom: 100px;
     }
 
     /* Order Card Styling */
