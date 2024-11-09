@@ -1,6 +1,7 @@
 import razorpay
 from django.conf import settings
 from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
 
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login as auth_login, logout as auth_logout
@@ -276,6 +277,14 @@ def payment_success(request):
                 payment.status = 'Success'
                 payment.razorpay_payment_id = razorpay_payment_id
                 payment.save()
+
+                # Send email after successful payment
+                subject = f"Payment Success for Order {order.id}"
+                message = f"Dear {order.user.username},\n\nYour payment for Order {order.id} has been successfully processed. Thank you for your purchase!\n\nOrder Details:\n"
+                message += '\n'.join([f"- {item.product.name} (Quantity: {item.quantity})" for item in order.orderitem_set.all()])
+                message += f"\n\nTotal Amount: ₹{payment.amount}\n\nRegards,\nYour Store"
+
+                send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, ['adarshappu546@gmail.com'])
 
             logger.info(f"Clearing cart for user: {request.user}")
             Cart.objects.filter(user=request.user).delete()
