@@ -101,6 +101,16 @@
 </style>
 
 <h2>Products</h2>
+
+{% if messages %}
+<div class="alert-container">
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>
+{% endif %}
 <div class="row">
     {% for product in products %}
         <div class="col-md-3">

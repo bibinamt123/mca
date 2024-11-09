@@ -54,8 +54,12 @@
             <ul class="navbar-nav ml-auto">
 
                 <li class="nav-item{% if request.resolver_match.url_name == 'cart' %} active{% endif %}">
-                    <a class="nav-link" href="{% url 'view_cart' %}"><i class="fa-solid fa-cart-shopping"></i>
-                    </a> <!-- Added Cart link -->
+                    <a class="nav-link" href="{% url 'view_cart' %}">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                        {% if cart_item_count > 0 %}
+                            <span class="badge badge-pill badge-primary">{{ cart_item_count }}</span>
+                        {% endif %}
+                    </a> <!-- Cart link with item count -->
                 </li>
                 {% if user.is_authenticated %}
                     <li class="nav-item dropdown">
